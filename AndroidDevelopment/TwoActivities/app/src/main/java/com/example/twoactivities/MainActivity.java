@@ -34,7 +34,23 @@ public class MainActivity extends AppCompatActivity {
         mReplyHeadTextView = findViewById(R.id.text_header_reply);
         mReplyTextView = findViewById(R.id.text_message_reply);
 
+        //Restore the state
+        if (savedInstanceState != null){
+            boolean isVisible = savedInstanceState.getBoolean("reply_visible");
+            //If it's true, set the reply head to visible
+            if (isVisible){
+                mReplyHeadTextView.setVisibility(View.VISIBLE);
+                mReplyTextView.setText(savedInstanceState.getString("reply_text"));
+                mReplyTextView.setVisibility(View.VISIBLE);
+            }
+        }
+
+        //Add a log statement to track when it is created
+        Log.d(LOG_TAG, "_______");
+        Log.d(LOG_TAG,"onCreate");
     }
+
+
 
     public void launchSecondActivity(View view) {
         Log.d(LOG_TAG, "Button clicked!");
@@ -67,4 +83,56 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    //Override the different states to see the transitions
+    //Override onStart just to see when it move to the start state
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d(LOG_TAG,"onStart");
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d(LOG_TAG,"onPause");
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        Log.d(LOG_TAG,"onRestart");
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d(LOG_TAG,"onResume");
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.d(LOG_TAG,"onStop");
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d(LOG_TAG,"onDestroy");
+    }
+
+    //Save the activity state
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        //Check if the reply head is currently visible, if so, set it to true
+        if (mReplyHeadTextView.getVisibility() == View.VISIBLE){
+            outState.putBoolean("reply_visible",true);
+            outState.putString("reply_text",mReplyTextView.getText().toString());
+        }
+    }
+
+
 }
