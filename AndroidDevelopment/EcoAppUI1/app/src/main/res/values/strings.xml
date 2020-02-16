@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">EcoAppUI1</string>
+    <string name="action_settings">Settings</string>
+    <string name="tap_number">ID number will go here</string>
+    <string name="score">Score</string>
+    <string name="taps">Number of Taps</string>
+    <string name="id">ID:</string>
+    <string name="taps_display"># of Taps:</string>
+    <string name="score_label">Score:</string>
+    <string name="button_label">Increment Tap</string>
+    <string name="id_hint">Enter ID Here</string>
+    <string name="id_name">Name</string>
+    <string name="scan_button_label">Scan</string>
+</resources>
