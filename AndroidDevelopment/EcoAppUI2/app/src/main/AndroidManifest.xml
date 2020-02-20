@@ -15,6 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".WriteToNFC">
+            android:label = "@string/second_activity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=
+                    "com.example.ecoappui2.MainActivity" />
+        </activity>
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/nfc_tech_filter" />

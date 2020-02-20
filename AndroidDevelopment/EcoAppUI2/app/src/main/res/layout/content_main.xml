@@ -93,37 +93,14 @@
         app:layout_constraintTop_toBottomOf="@+id/num_taps_label" />
 
     <Button
-        android:id="@+id/tap_button"
+        android:id="@+id/reprogram_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:onClick="button_tap"
-        android:text="@string/button_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_input" />
-
-    <EditText
-        android:id="@+id/id_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="@string/id_hint"
-        android:inputType="textPersonName"
+        android:text="Reprogram"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
-        android:imeActionId="100"
-        android:imeOptions="actionDone"/>
+        android:onClick="reprogram"/>
 
-    <Button
-        android:id="@+id/scan_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/scan_button_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tap_button"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

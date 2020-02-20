@@ -13,11 +13,9 @@ import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,10 +26,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,9 +44,10 @@ public class MainActivity extends AppCompatActivity {
     Tag myTag;
     Context context;
 
-    TextView tvNFCContent;
-    TextView message;
-    Button btnWrite;
+
+    TextView tvNFCContent;                  //Variable for the textView showing the read NFC content
+    TextView message;                       //TextView for what to write to the NFC sticker
+    Button btnWrite;                        //Button to write
 
 
     //Variables for the taps
@@ -60,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView mIdTextView;   //Variable for the text view
 
 
+    //String array of categories
+    ArrayList<String> categories = new ArrayList<String>();
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Add all the categories
+        categories.add("Waterbottle");
+        categories.add("Bus");
+        categories.add("Bike");
+        categories.add("Reusable Grocery Bag");
+        categories.add("Recycling Bin");
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,24 +91,11 @@ public class MainActivity extends AppCompatActivity {
         mShowTaps = (TextView) findViewById(R.id.num_taps_display);
 
         //Reference the id editText
-        mIdEditText = findViewById(R.id.id_input);
         mIdTextView = findViewById(R.id.id_display);
+        btnWrite = findViewById(R.id.reprogram_button);
 
 
-        //Set what happens when the enter button is pressed in the EditText
-        mIdEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String id_string = mIdEditText.getText().toString();
-                    mIdTextView.setText(id_string);
-                }
-
-                return false;
-            }
-        });
 
 
         /******************************************************************************
@@ -107,30 +105,9 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         tvNFCContent = (TextView) findViewById(R.id.id_display);
-        message = findViewById(R.id.id_input);
-        btnWrite = (Button) findViewById(R.id.scan_button);
-
-        btnWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (myTag == null) {
-                        Toast.makeText(context, ERROR_DETECTED, Toast.LENGTH_LONG).show();
-                    } else {
-                        write(message.getText().toString(), myTag);
-                        Toast.makeText(context, WRITE_SUCCESS, Toast.LENGTH_LONG).show();
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                } catch (FormatException e) {
-                    Toast.makeText(context, WRITE_ERROR, Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-        });
 
 
+        //Checks to make sure the device has NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
             // Stop here, we definitely need NFC
@@ -139,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
         readFromIntent(getIntent());
 
+        //Creates new intents
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
@@ -168,13 +146,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void button_tap(View view) {
-        mTaps++;
-        if (mShowTaps != null) {
-            mShowTaps.setText(Integer.toString(mTaps));
-        }
-
-    }
 
 
     /******************************************************************************
@@ -185,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     /******************************************************************************
      **********************************Read From NFC Tag***************************
      ******************************************************************************/
+    //Function to read the intent coming form the NFC tag
     private void readFromIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -219,12 +191,27 @@ public class MainActivity extends AppCompatActivity {
             Log.e("UnsupportedEncoding", e.toString());
         }
 
-        Gson gson = new Gson();
-        gson.toJson(text);
+        //Set the text to be viewed
+        tvNFCContent.setText(text);
+        Log.d("MainActivity",text);
+
+        if(categories.contains(text)){
+
+        }
+        //If the text is not one of the categories, move to the Write activity
+        else{
+            Intent intent = new Intent(this, WriteToNFC.class);
+            startActivity(intent);
+        }
+        //Gson gson = new Gson();
+        //gson.toJson(text);
 
 
-        tvNFCContent.setText(gson.toString());
+        //tvNFCContent.setText(gson.toString());
     }
+
+
+
 
 
     /******************************************************************************
@@ -242,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         // Close the connection
         ndef.close();
     }
+
 
     private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
         String lang = "en";
@@ -264,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //When there is a new intent, set the intent and read it
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -271,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         }
+
+
     }
 
     @Override
@@ -303,5 +294,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void reprogram(View view) {
+        Intent intent = new Intent(this, WriteToNFC.class);
+        startActivity(intent);
+    }
 }
 
