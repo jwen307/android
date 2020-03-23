@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "100541195325",
+    "firebase_url": "https://fire-storage-tutorial.firebaseio.com",
+    "project_id": "fire-storage-tutorial",
+    "storage_bucket": "fire-storage-tutorial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100541195325:android:525c7e0a7fa632dd733654",
+        "android_client_info": {
+          "package_name": "com.example.fire_storage_tutorial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "100541195325-42epdc2ouc9dldr4gtfl1gj5i8to5dmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkc4sFRF-Vz3OVF4bSlPAt-LJxgjZbZQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "100541195325-42epdc2ouc9dldr4gtfl1gj5i8to5dmm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
